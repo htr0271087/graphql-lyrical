@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import ggl from 'graphql-tag';
+import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
 class LyricCreate extends Component {
     constructor(props) {
         super(props);
+
         this.state = { content: '' };
     }
 
@@ -21,27 +22,28 @@ class LyricCreate extends Component {
 
     render() {
         return (
-            <div>
-                <form onSubmit={this.onSubmit.bind(this)}>
-                    <label>Add a Lyric</label>
-                    <input value={this.state.content}
-                        onChange={event => this.setState({ content: event.target.value })} />
-                </form>
-            </div>
+            <form onSubmit={this.onSubmit.bind(this)}>
+                <label>Add a Lyric</label>
+                <input
+                    value={this.state.content}
+                    onChange={event => this.setState({ content: event.target.value })}
+                />
+            </form>
         );
     }
 }
 
-const mutation = ggl`
-    mutation AddLyricToSong($content: String, $songId: ID) {
-        addLyricToSong(content: $content, songId: $songId) {
-            id
-            lyrics {
-                id
-                content
-            }
-        }
+const mutation = gql`
+  mutation AddLyricToSong($content: String, $songId: ID) {
+    addLyricToSong(content: $content, songId: $songId) {
+      id
+      lyrics {
+        id
+        content
+        likes
+      }
     }
+  }
 `;
 
 export default graphql(mutation)(LyricCreate);
